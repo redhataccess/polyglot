@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Polyglot Testing</title>
+        <style>
+        html,
+        body {
+        margin:0;
+        padding:0;
+        font-family:Helvetica,sans-serif;
+        }
+        div {margin:1em 0;}
+        label {
+        display:block;
+        margin:0 0 3px;
+        }
+        textarea {
+            height: 296px;
+        }
+        input {font-size:1em;}
+        input[type=text],
+        input[type=submit],
+        textarea,
+        select {
+        width:296px;
+        padding:2px;
+        }
+        #wrap {
+        width:600px;
+        margin:0 auto;
+        }
+        </style>
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.14/require.min.js"></script>
+        <script type="text/javascript" src="polyglot.js"></script>
+    </head>
+    <body>
+        <div id="wrap">
+            <h1>Polyglot Testing</h1>
+            <form id="tester">
+                <div class="text">
+                    <label for="keys">Key(s)</label>
+                    <input type="text" name="keys">
+                </div>
+                <div class="select">
+                    <label for="lang">Language</label>
+                    <select name="lang">
+                        <option value="en">English</option>
+                        <option value="es">Spanish</option>
+                        <option value="fr">French</option>
+                        <option value="de">German</option>
+                    </select>
+                </div>
+                <div>
+                    <input type="submit" id="submitBtn">
+                </div>
+            </form>
+
+            <textarea id="result"></textarea>
+        </div>
+        <script type="text/javascript" src="tester.js"></script>
+    </body>
+</html>
