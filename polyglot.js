@@ -13,7 +13,7 @@
         FALLBACK_KEY = 'RHCP-_POLYGLOT',
         //STORAGE_KEY = 'RHCP-POLYGLOT',
         VALID_LANGS = ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'pt', 'ru', 'zh_CN'],
-        POLYGLOT_SERVER = 'https://polyglot-redhataccess.itos.redhat.com/',
+        POLYGLOT_SERVER = '//polyglot-redhataccess.itos.redhat.com/',
         hasStorage = ('localStorage' in window && window.localStorage !== null);
 
     /**
@@ -124,7 +124,13 @@
             queryData.version = version;
         }
 
-        this._get(POLYGLOT_SERVER, queryData, true).done(function(data) {
+        var url = POLYGLOT_SERVER;
+        if ($.browser.msie) {
+            if (parseInt(ajq.browser.version, 10) < 10) {
+                url += '?callback=jsonp';
+            }
+        }
+        $.getJSON(POLYGLOT_SERVER, queryData).done(function(data) {
             var keys = _objKeys(data),
                 prop;
 
@@ -189,22 +195,6 @@
                 _safeStore(FALLBACK_KEY, JSON.stringify(vals));
             }
         });
-    };
-
-    Polyglot.prototype._get = function(url, data, cors) {
-        var dfd = new $.Deferred(),
-            // *groan* IE
-            xhr = (typeof XDomainRequest !== 'undefined' && cors) ? new XDomainRequest() : new XMLHttpRequest();
-        xhr.onload = function() {
-            dfd.resolve(JSON.parse(xhr.response));
-        };
-        xhr.onerror = function() {
-            dfd.reject();
-        };
-        var reqUrl = (url + '?' + $.param(data));
-        xhr.open('GET', reqUrl, true);
-        xhr.send();
-        return dfd.promise();
     };
 
     /**
