@@ -13,7 +13,7 @@
         FALLBACK_KEY = 'RHCP-_POLYGLOT',
         //STORAGE_KEY = 'RHCP-POLYGLOT',
         VALID_LANGS = ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'pt', 'ru', 'zh_CN'],
-        POLYGLOT_SERVER = '//polyglot-redhataccess.itos.redhat.com/',
+        POLYGLOT_SERVER = 'https://polyglot-redhataccess.itos.redhat.com/',
         hasStorage = ('localStorage' in window && window.localStorage !== null);
 
     /**
