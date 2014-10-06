@@ -205,8 +205,8 @@
             }
         }
         var reqUrl = (url + '?' + $.param(data));
-        xhr.open('GET', reqUrl);
-        xhr.send(null);
+        xhr.open('GET', reqUrl, true);
+        xhr.send();
         return dfd.promise();
     };
 
