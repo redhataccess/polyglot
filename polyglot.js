@@ -195,10 +195,10 @@
         var dfd = new $.Deferred(),
             // *groan* IE
             xhr = (typeof XDomainRequest !== 'undefined' && cors) ? new XDomainRequest() : new XMLHttpRequest();
-        xhr.onreadystatechange = function(data) {
+        xhr.onreadystatechange = function() {
             if (xhr.readyState === 4) {
                 if (xhr.status < 400) {
-                    dfd.resolve(JSON.parse(data));
+                    dfd.resolve(JSON.parse(xhr.response));
                 } else {
                     dfd.reject();
                 }
