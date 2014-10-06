@@ -127,7 +127,7 @@
         var url = POLYGLOT_SERVER;
         if ($.browser && $.browser.msie) {
             if (parseInt($.browser.version, 10) < 10) {
-                url += '?callback=jsonp';
+                url += '?callback=?';
             }
         }
         $.getJSON(url, queryData).done(function(data) {
