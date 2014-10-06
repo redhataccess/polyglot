@@ -195,15 +195,12 @@
         var dfd = new $.Deferred(),
             // *groan* IE
             xhr = (typeof XDomainRequest !== 'undefined' && cors) ? new XDomainRequest() : new XMLHttpRequest();
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === 4) {
-                if (xhr.status < 400) {
-                    dfd.resolve(JSON.parse(xhr.response));
-                } else {
-                    dfd.reject();
-                }
-            }
-        }
+        xhr.onload = function() {
+            dfd.resolve(JSON.parse(xhr.response));
+        };
+        xhr.onerror = function() {
+            dfd.reject();
+        };
         var reqUrl = (url + '?' + $.param(data));
         xhr.open('GET', reqUrl, true);
         xhr.send();
