@@ -13,7 +13,8 @@
         FALLBACK_KEY = 'RHCP-_POLYGLOT',
         //STORAGE_KEY = 'RHCP-POLYGLOT',
         VALID_LANGS = ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'pt', 'ru', 'zh_CN'],
-        POLYGLOT_SERVER = '//polyglot-redhataccess.itos.redhat.com/',
+        POLYGLOT_SERVER = '//polyglot-etc.itos.redhat.com/',
+        useRelative = (window.location.hostname.indexOf('redhat.com') > 0),
         hasStorage = ('localStorage' in window && window.localStorage !== null);
 
     /**
@@ -72,6 +73,30 @@
             // string -> array -> sort -> string
             return keys.split(',').sort().join(',');
         },
+        _escape = function(text) {
+            return text.replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        },
+        _parseProperties = function(properties) {
+            var lines = properties.split('\n'),
+                parsed = {
+                    en: {}
+                },
+                i;
+            for (i = 0; i < lines.length; i++) {
+                var line = lines[i];
+                if (!line || line.indexOf('#') === 0) {
+                    continue;
+                }
+                var item = line.split('=');
+                var key = item.shift();
+                var value = item.join('=');
+                parsed.en[key] = value;
+            }
+            return parsed;
+        },
         _safeStore = function(key, value) {
             if (!hasStorage) {
                 // :'(
@@ -86,6 +111,10 @@
         };
 
     var Polyglot = function() {
+        if (useRelative) {
+            // Use relative path if we are in *.redhat.com
+            POLYGLOT_SERVER = '/etc/polyglot/';
+        }
         // init object of already called deferreds
         this._fetchDfds = {};
         // the vals we have so far
@@ -124,38 +153,34 @@
             queryData.version = version;
         }
 
-        var url = POLYGLOT_SERVER;
-        if ($.browser && $.browser.msie) {
-            if (parseInt($.browser.version, 10) < 10) {
-                url += '?callback=?';
-            }
-        }
-        $.getJSON(url, queryData).done(function(data) {
-            var keys = _objKeys(data),
-                prop;
+        $.getJSON(POLYGLOT_SERVER, queryData)
+            .done(function(data) {
+                var keys = _objKeys(data),
+                    prop;
 
-            for (var i = 0; i < keys.length; i++) {
-                lang = keys[i];
-                if (typeof self._vals[lang] === 'undefined') {
-                    self._vals[lang] = {};
+                for (var i = 0; i < keys.length; i++) {
+                    lang = keys[i];
+                    if (typeof self._vals[lang] === 'undefined') {
+                        self._vals[lang] = {};
+                    }
+                    // Mixin returned vals to local vals
+                    for (prop in data[lang]) {
+                        self._vals[lang][prop] = data[lang][prop];
+                    }
                 }
-                // Mixin returned vals to local vals
-                for (prop in data[lang]) {
-                    self._vals[lang][prop] = data[lang][prop];
-                }
-            }
-            dfd.resolve(data);
-        }).fail(function() {
-            // hail mary
-            dfd.resolve(self._fallback(keys, lang));
-        });
+                dfd.resolve(data);
+            })
+            .fail(function() {
+                self._fallback(keys, lang, dfd);
+            });
         return dfd.promise();
     };
 
-    Polyglot.prototype._fallback = function(keys, lang) {
+    Polyglot.prototype._fallback = function(keys, lang, dfd) {
         var fallback = _safeStore(FALLBACK_KEY);
         if (!fallback) {
             console.error('Couldn\'t fallback!');
+            this._getRaw(dfd);
             return;
         }
         lang = _normalizeLang(lang);
@@ -175,7 +200,21 @@
                 obj[lang][key] = fallback[key];
             }
         }
-        return obj;
+        dfd.resolve(obj);
+    };
+
+    Polyglot.prototype._getRaw = function(dfd) {
+        // This is the absolute worst case scenario.
+        // Chances are, polyglot is down and we are
+        // going to parse the raw messages.properties file
+        // Wish us luck.
+        $.get('/webassets/avalon/j/messages/messages.properties')
+            .done(function(response) {
+                dfd.resolve(_parseProperties(response));
+            })
+            .fail(function() {
+                dfd.reject();
+            });
     };
 
     Polyglot.prototype._initFallback = function() {
