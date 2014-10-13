@@ -1,0 +1,25 @@
+{
+  "name": "rh-polyglot",
+  "version": "0.0.1",
+  "homepage": "https://github.com/redhataccess/rh-polyglot",
+  "authors": [
+    "(Connor Hindley <connor@redhat.com>)"
+  ],
+  "description": "Consumer of rh-polyglot-server",
+  "main": "rh-polyglot.js",
+  "moduleType": [
+    "amd",
+    "globals"
+  ],
+  "keywords": [
+    "i18n"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
