@@ -1,6 +1,6 @@
 require.config({
     paths: {
-        'polyglot': 'polyglot',
+        'polyglot': 'rh-polyglot',
         'jquery': '//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.2/jquery.min',
         'moment': '//cdnjs.cloudflare.com/ajax/libs/moment.js/2.2.1/moment.min'
     }
