@@ -142,6 +142,26 @@
         return this._fetchDfds[hash];
     };
 
+    Polyglot.prototype.k = function(key, lang) {
+        var dfd = new $.Deferred();
+        var fetchDfs = [];
+        for (var d in this._fetchDfds) {
+            fetchDfs.push(this._fetchDfds[d]);
+        }
+
+        var self = this;
+
+        $.when.apply($, fetchDfs).then(function() {
+            var langObj = self._vals[lang];
+            if (langObj && langObj[key]) {
+                return dfd.resolve(langObj[key]);
+            }
+            return dfd.resolve(key);
+        });
+
+        return dfd.promise();
+    };
+
     Polyglot.prototype._fetch = function(keys, lang, version) {
         var dfd = new $.Deferred(),
             self = this,
