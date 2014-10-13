@@ -1,6 +1,6 @@
 {
   "name": "rh-polyglot",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/redhataccess/rh-polyglot",
   "authors": [
     "(Connor Hindley <connor@redhat.com>)"
@@ -20,6 +20,8 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "index.html",
+    "tester.js"
   ]
 }
