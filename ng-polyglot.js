@@ -15,7 +15,8 @@
             defaultFn = {
                 fn: 'html'
             };
-        angular.forEach($attrs.$attr, function(attr) {
+        angular.forEach($attrs.$attr, function(value, key) {
+            var attr = key;
             if (attr === 'polyText') {
                 attrFns.push({
                     fn: 'text'
