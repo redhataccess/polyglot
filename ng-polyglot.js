@@ -28,7 +28,7 @@
                 if (matches && matches.length && matches.length === 2) {
                     attrFns.push({
                         fn: 'attr',
-                        attr: matches[1]
+                        attr: matches[1].toLowerCase()
                     });
                 }
             }
