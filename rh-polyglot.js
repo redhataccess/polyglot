@@ -14,7 +14,7 @@
         //STORAGE_KEY = 'RHCP-POLYGLOT',
         VALID_LANGS = ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'pt', 'ru', 'zh_CN'],
         POLYGLOT_SERVER = '//polyglot-etc.itos.redhat.com/',
-        useRelative = (window.location.hostname.indexOf('redhat.com') > 0),
+        useRelative = (window.location.hostname.indexOf('access.redhat.com') > 0),
         hasStorage = ('localStorage' in window && window.localStorage !== null);
 
     /**
