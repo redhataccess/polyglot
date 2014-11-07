@@ -13,8 +13,7 @@
         FALLBACK_KEY = 'RHCP-_POLYGLOT',
         //STORAGE_KEY = 'RHCP-POLYGLOT',
         VALID_LANGS = ['en', 'de', 'es', 'fr', 'it', 'ja', 'ko', 'pt', 'ru', 'zh_CN'],
-        POLYGLOT_SERVER = '//polyglot-etc.itos.redhat.com/',
-        useRelative = (window.location.hostname.indexOf('access.redhat.com') > 0),
+        POLYGLOT_SERVER = '//access.redhat.com/etc/polyglot/',
         hasStorage = ('localStorage' in window && window.localStorage !== null);
 
     /**
@@ -114,10 +113,6 @@
         };
 
     var Polyglot = function() {
-        if (useRelative) {
-            // Use relative path if we are in *.redhat.com
-            POLYGLOT_SERVER = '/etc/polyglot/';
-        }
         // init object of already called deferreds
         this._fetchDfds = {};
         // the vals we have so far
@@ -202,7 +197,9 @@
     Polyglot.prototype._fallback = function(keys, lang, dfd) {
         var fallback = _safeStore(FALLBACK_KEY);
         if (!fallback) {
-            console.error('Couldn\'t fallback!');
+            if (window.console) {
+                console.error('Couldn\'t fallback!');
+            }
             this._getRaw(dfd);
             return;
         }
