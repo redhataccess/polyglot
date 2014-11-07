@@ -32,6 +32,9 @@
             if (!lang) {
                 return 'en';
             }
+            if (lang === 'zh') {
+                lang = 'zh_CN';
+            }
             var validLang = false,
                 i;
             for (i = 0; i < VALID_LANGS.length; i++) {
